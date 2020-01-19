@@ -1,5 +1,10 @@
 import express from 'express';
-import { createDelivery, findDeliveries, findUserDeliveries } from '../resources/delivery';
+import {
+  createDelivery,
+  findDeliveries,
+  findUserDeliveries,
+  deleteUserDeliveryById,
+} from '../resources/delivery';
 
 const router = express.Router();
 
@@ -37,6 +42,19 @@ const deliveryRoutes = () => {
       next(error);
     }
   });
+
+  router.delete('/user-delivery', async (req, res, next) => {
+    try {
+      const token = req.headers.authorization;
+      const { id } = req.body;
+      const deliveries = await deleteUserDeliveryById({ id, token });
+
+      res.json({ deliveries });
+    } catch (error) {
+      next(error);
+    }
+  });
+
 
   return router;
 };

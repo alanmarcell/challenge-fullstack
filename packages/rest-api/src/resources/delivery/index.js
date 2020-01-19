@@ -24,8 +24,16 @@ const findDeliveries = async () => {
   return userDeliveries;
 };
 
+const deleteUserDeliveryById = async ({ id, token }) => {
+  const { email } = decodeToken(token);
+  const user = await findUser({ email });
+  const deleteRes = await deliveryModel.findOneAndDelete({ $and: [{ user }, { _id: id }] });
+  return deleteRes;
+};
+
 export {
   createDelivery,
+  deleteUserDeliveryById,
   findDeliveries,
   findUserDeliveries,
 };
