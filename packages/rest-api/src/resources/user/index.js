@@ -11,6 +11,8 @@ const findUser = async ({ email }) => {
   return foundUser;
 };
 
+export const decodeToken = (token) => jwt.verify(token, JWT_SECRET);
+
 const generateToken = (user) => jwt.sign(user, JWT_SECRET, {
   expiresIn: 10 * 60,
 });
@@ -33,7 +35,7 @@ const createUser = async ({ email, password }) => {
     password: hashPassword,
   });
 
-  return generateToken(createdUser.email);
+  return generateToken({ email: createdUser.email });
 };
 
 const authenticateUser = async ({ email, password }) => {
@@ -50,7 +52,7 @@ const authenticateUser = async ({ email, password }) => {
   const isPasswordCorrect = await compare(password, foundUser.password);
 
   if (isPasswordCorrect) {
-    return generateToken(foundUser.email);
+    return generateToken({ email: foundUser.email });
   }
 
   throw new Error('Invalid credentials');
@@ -58,5 +60,6 @@ const authenticateUser = async ({ email, password }) => {
 
 export {
   createUser,
+  findUser,
   authenticateUser,
 };
