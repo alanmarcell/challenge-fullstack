@@ -24,6 +24,14 @@ const findDeliveries = async () => {
   return userDeliveries;
 };
 
+const deleteDeliveries = ({ token }) => {
+  const { email } = decodeToken(token);
+  if (email) {
+    return deliveryModel.remove({});
+  }
+  throw new Error('You must be authenticated');
+};
+
 const deleteUserDeliveryById = async ({ id, token }) => {
   const { email } = decodeToken(token);
   const user = await findUser({ email });
@@ -31,8 +39,10 @@ const deleteUserDeliveryById = async ({ id, token }) => {
   return deleteRes;
 };
 
+
 export {
   createDelivery,
+  deleteDeliveries,
   deleteUserDeliveryById,
   findDeliveries,
   findUserDeliveries,

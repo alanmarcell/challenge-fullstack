@@ -4,6 +4,7 @@ import {
   findDeliveries,
   findUserDeliveries,
   deleteUserDeliveryById,
+  deleteDeliveries,
 } from '../resources/delivery';
 
 const router = express.Router();
@@ -36,6 +37,17 @@ const deliveryRoutes = () => {
   router.get('/deliveries', async (req, res, next) => {
     try {
       const deliveries = await findDeliveries();
+
+      res.json({ deliveries });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.delete('/deliveries', async (req, res, next) => {
+    try {
+      const token = req.headers.authorization;
+      const deliveries = await deleteDeliveries({ token });
 
       res.json({ deliveries });
     } catch (error) {
