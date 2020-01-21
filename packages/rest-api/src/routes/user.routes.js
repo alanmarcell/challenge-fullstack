@@ -7,9 +7,9 @@ const userRoutes = () => {
   router.post('/create', async (req, res, next) => {
     try {
       const user = req.body;
-      const createdUser = await createUser(user);
+      const token = await createUser(user);
 
-      res.json({ createdUser });
+      res.json({ token });
     } catch (error) {
       next(error);
     }

@@ -34,8 +34,9 @@ const createUser = async ({ email, password }) => {
     email,
     password: hashPassword,
   });
+  const generatedToken = generateToken({ email: createdUser.email });
 
-  return generateToken({ email: createdUser.email });
+  return generatedToken;
 };
 
 const authenticateUser = async ({ email, password }) => {
