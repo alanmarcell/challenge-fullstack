@@ -1,0 +1,8 @@
+{
+  "name": "challenge-fullstack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/alanmarcell/challenge-fullstack",
+  "author": "Alan Marcell <alanmarcell@live.com>",
+  "license": "MIT"
+}
