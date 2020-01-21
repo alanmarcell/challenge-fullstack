@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -7,7 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { loginDatasource } from '../../datasource/challenge.datasource';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -30,9 +31,23 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const RegisterScene = () => {
-  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState(' ');
   const classes = useStyles();
+  const history = useHistory();
+
+  useEffect(() => {
+    const token = localStorage.getItem('user-token');
+    if (token) {
+      history.push('/deliveries');
+    }
+  });
+  const handleLogin = async () => {
+    const registerResult = await loginDatasource({ email, password });
+    localStorage.setItem('user-token', registerResult.data.token);
+    history.push('/deliveries');
+  };
+
   return (
     <div className={classes.paper}>
       <Avatar className={classes.avatar}>
@@ -47,11 +62,11 @@ const RegisterScene = () => {
           margin="normal"
           required
           fullWidth
-          id="name"
-          label="Nome"
-          name="name"
-          value={name}
-          onChange={e => setName(e.target.value)}
+          id="email"
+          label="Email"
+          name="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
           autoFocus
         />
         <TextField
@@ -72,6 +87,7 @@ const RegisterScene = () => {
           fullWidth
           variant="contained"
           color="primary"
+          onClick={handleLogin}
           className={classes.submit}>
           Login
         </Button>

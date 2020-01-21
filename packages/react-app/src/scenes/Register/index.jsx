@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -6,8 +6,9 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
+import { createUserDatasource } from '../../datasource/challenge.datasource';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -30,10 +31,24 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const RegisterScene = () => {
-  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const classes = useStyles();
+  const history = useHistory();
+
+  useEffect(() => {
+    const token = localStorage.getItem('user-token');
+    if (token) {
+      history.push('/deliveries');
+    }
+  });
+
+  const handleRegister = async () => {
+    const registerResult = await createUserDatasource({ email, password });
+    localStorage.setItem('user-token', registerResult.data.token);
+    history.push('/deliveries');
+  };
 
   return (
     <div className={classes.paper}>
@@ -43,17 +58,17 @@ const RegisterScene = () => {
       <Typography component="h1" variant="h5">
         Sign in
       </Typography>
-      <form className={classes.form} noValidate>
+      <div className={classes.form}>
         <TextField
           variant="outlined"
           margin="normal"
           required
           fullWidth
-          id="nome"
-          label="Nome"
-          name="name"
-          value={name}
-          onChange={({ target }) => setName(target.value)}
+          id="email"
+          label="Email"
+          name="email"
+          value={email}
+          onChange={({ target }) => setEmail(target.value)}
           autoFocus
         />
         <TextField
@@ -83,10 +98,10 @@ const RegisterScene = () => {
           id="password"
         />
         <Button
-          type="submit"
           fullWidth
           variant="contained"
           color="primary"
+          onClick={handleRegister}
           className={classes.submit}>
           Criar conta
         </Button>
@@ -97,7 +112,7 @@ const RegisterScene = () => {
             </Link>
           </Grid>
         </Grid>
-      </form>
+      </div>
     </div>
   );
 };
