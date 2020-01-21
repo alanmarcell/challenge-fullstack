@@ -7,8 +7,10 @@ const instance = axios.create({
 
 const createUserDatasource = (createUserParams) => instance.post('/user/create', createUserParams);
 const loginDatasource = (loginParams) => instance.post('/user/auth', loginParams);
+const deliveriesDatasource = () => instance.get('/deliveries');
 
 export {
-  loginDatasource,
   createUserDatasource,
+  deliveriesDatasource,
+  loginDatasource,
 };

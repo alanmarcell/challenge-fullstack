@@ -6,7 +6,7 @@ import Routes from './routes';
 
 function App() {
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main">
       <CssBaseline />
       <Routes />
     </Container>
