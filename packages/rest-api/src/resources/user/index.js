@@ -11,7 +11,13 @@ const findUser = async ({ email }) => {
   return foundUser;
 };
 
-export const decodeToken = (token) => jwt.verify(token, JWT_SECRET);
+export const decodeToken = (token) => {
+  try {
+    jwt.verify(token, JWT_SECRET);
+  } catch (error) {
+    throw new Error('INVALID_TOKEN', error.message);
+  }
+};
 
 const generateToken = (user) => jwt.sign(user, JWT_SECRET, {
   expiresIn: 10 * 60,
