@@ -32,9 +32,11 @@ const DeliveriesScene = () => {
 
   const history = useHistory();
   const [deliveries, setDeliveries] = useState([]);
+  const [deliveriesLoaded, setDeliveriesLoaded] = useState(false);
   useEffect(() => {
-    if (R.isEmpty(deliveries)) {
+    if (!deliveriesLoaded) {
       deliveriesDatasource().then(res => {
+        setDeliveriesLoaded(true);
         setDeliveries(res.data.deliveries);
       });
     }
