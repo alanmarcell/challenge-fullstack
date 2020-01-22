@@ -13,7 +13,7 @@ const findUser = async ({ email }) => {
 
 export const decodeToken = (token) => {
   try {
-    jwt.verify(token, JWT_SECRET);
+    return jwt.verify(token, JWT_SECRET);
   } catch (error) {
     throw new Error('INVALID_TOKEN', error.message);
   }
