@@ -9,8 +9,10 @@ import {
 
 const router = express.Router();
 
+const errorHandler = (res, error) => res.status(500).json({ message: error.message });
+
 const deliveryRoutes = () => {
-  router.post('/deliveries', async (req, res, next) => {
+  router.post('/deliveries', async (req, res, _next) => {
     try {
       const token = req.headers.authorization;
       const delivery = req.body;
@@ -18,44 +20,44 @@ const deliveryRoutes = () => {
 
       res.json({ createdDelivery });
     } catch (error) {
-      next(error);
+      errorHandler(res, error);
     }
   });
 
-  router.get('/user-deliveries', async (req, res, next) => {
+  router.get('/user-deliveries', async (req, res, _next) => {
     try {
       const token = req.headers.authorization;
       const userDeliveries = await findUserDeliveries({ token });
 
       res.json({ userDeliveries });
     } catch (error) {
-      next(error);
+      errorHandler(res, error);
     }
   });
 
 
-  router.get('/deliveries', async (req, res, next) => {
+  router.get('/deliveries', async (req, res, _next) => {
     try {
       const deliveries = await findDeliveries();
 
       res.json({ deliveries });
     } catch (error) {
-      next(error);
+      errorHandler(res, error);
     }
   });
 
-  router.delete('/deliveries', async (req, res, next) => {
+  router.delete('/deliveries', async (req, res, _next) => {
     try {
       const token = req.headers.authorization;
       const deliveries = await deleteDeliveries({ token });
 
       res.json({ deliveries });
     } catch (error) {
-      next(error);
+      errorHandler(res, error);
     }
   });
 
-  router.delete('/user-delivery', async (req, res, next) => {
+  router.delete('/user-delivery', async (req, res, _next) => {
     try {
       const token = req.headers.authorization;
       const { id } = req.body;
@@ -63,7 +65,7 @@ const deliveryRoutes = () => {
 
       res.json({ deliveries });
     } catch (error) {
-      next(error);
+      errorHandler(res, error);
     }
   });
 

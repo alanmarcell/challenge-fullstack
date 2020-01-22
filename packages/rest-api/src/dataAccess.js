@@ -12,7 +12,7 @@ const connect = () => {
   mongooseConnection = Mongoose.connection;
   mongooseConnection.once('open', () => {
     // eslint-disable-next-line no-console
-    console.log('Connected to mongodb url:', DB_CONNECTION_STRING);
+    console.log('Connected to mongodb url:');
   });
 
   mongooseInstance = Mongoose.connect(DB_CONNECTION_STRING, {
