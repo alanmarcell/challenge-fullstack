@@ -18,9 +18,11 @@ const createUserDatasource = (createUserParams) => instance.post('/user/create',
 const loginDatasource = (loginParams) => instance.post('/user/auth', loginParams, generateUpdatedAuth());
 const deliveriesDatasource = () => instance.get('/deliveries', generateUpdatedAuth());
 const resetDeliveriesDatasource = () => instance.delete('/deliveries', generateUpdatedAuth());
+const createDeliveryDatasource = (createDeliveryParams) => instance.post('/deliveries', createDeliveryParams, generateUpdatedAuth());
 
 export {
   createUserDatasource,
+  createDeliveryDatasource,
   deliveriesDatasource,
   loginDatasource,
   resetDeliveriesDatasource,

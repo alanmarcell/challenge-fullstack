@@ -10,6 +10,7 @@ import {
   resetDeliveriesDatasource,
 } from '../../datasource/challenge.datasource';
 import DeliveriesList from './DeliveriesList';
+import AddDeliveryScene from './AddDelivery';
 
 const useStyles = makeStyles(theme => ({
   table: {
@@ -60,6 +61,7 @@ const DeliveriesScene = () => {
   return (
     <Paper className={classes.paper}>
       <DeliveriesList deliveries={deliveries} />
+      <AddDeliveryScene deliveries={deliveries} setDeliveries={setDeliveries} />
       <Button onClick={onResetDeliveries} variant="outlined">
         <Typography>Resetar Cadastro</Typography>
       </Button>
