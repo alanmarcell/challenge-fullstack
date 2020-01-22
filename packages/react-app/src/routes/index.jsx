@@ -15,7 +15,10 @@ const Routes = () => {
         <Route path="/register">
           <RegisterScene />
         </Route>
-        <Route path="/">
+        <Route path="/auth">
+          <LoginScene />
+        </Route>
+        <Route path="/" exact>
           <LoginScene />
         </Route>
       </Switch>

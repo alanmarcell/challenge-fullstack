@@ -3,12 +3,13 @@ import { useHistory } from 'react-router-dom';
 import * as R from 'ramda';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import {
   deliveriesDatasource,
   resetDeliveriesDatasource,
 } from '../../datasource/challenge.datasource';
 import DeliveriesList from './DeliveriesList';
-import { Button, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   table: {
@@ -38,18 +39,32 @@ const DeliveriesScene = () => {
     }
   });
 
+  const [token, setToken] = useState(localStorage.getItem('user-token'));
+
+  const onLogout = () => {
+    localStorage.setItem('user-token', '');
+    setToken('');
+  };
+
+  const onResetDeliveries = async () => {
+    await resetDeliveriesDatasource();
+    setDeliveries([]);
+  };
+
   useEffect(() => {
-    const token = localStorage.getItem('user-token');
     if (!token) {
-      history.push('/');
+      history.push('/auth');
     }
   });
 
   return (
     <Paper className={classes.paper}>
       <DeliveriesList deliveries={deliveries} />
-      <Button onClick={resetDeliveriesDatasource}>
+      <Button onClick={onResetDeliveries} variant="outlined">
         <Typography>Resetar Cadastro</Typography>
+      </Button>
+      <Button onClick={onLogout} variant="outlined">
+        <Typography>Logout</Typography>
       </Button>
     </Paper>
   );
