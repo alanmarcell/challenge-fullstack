@@ -40,7 +40,7 @@ const DeliveriesList = props => {
   const headerString = `Total de clientes: ${totalClients}. Peso total: ${totalWeight} kg. Ticket médio: ${meanTicket}`;
 
   return (
-    <Paper className={classes.paper}>
+    <>
       <Toolbar>
         <Typography className={classes.title} variant="h6" id="tableTitle">
           {headerString}
@@ -84,7 +84,7 @@ const DeliveriesList = props => {
           </TableBody>
         </Table>
       </TableContainer>
-    </Paper>
+    </>
   );
 };
 
