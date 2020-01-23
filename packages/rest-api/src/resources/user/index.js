@@ -20,7 +20,7 @@ export const decodeToken = (token) => {
 };
 
 const generateToken = (user) => jwt.sign(user, JWT_SECRET, {
-  expiresIn: 10 * 60,
+  expiresIn: 60 * 60 * 24,
 });
 
 const createUser = async ({ email, password }) => {
