@@ -33,6 +33,7 @@ const useStyles = makeStyles(theme => ({
 
 const RegisterScene = () => {
   const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState('');
   const [password, setPassword] = useState(' ');
   const classes = useStyles();
   const history = useHistory();
@@ -44,7 +45,9 @@ const RegisterScene = () => {
     }
   });
   const handleLogin = async () => {
+    setIsLoading(true);
     const registerResult = await loginDatasource({ email, password });
+    setIsLoading(false);
     localStorage.setItem('user-token', registerResult.data.token);
     history.push('/deliveries');
   };

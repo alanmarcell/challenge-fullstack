@@ -29,48 +29,84 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const createFindComponent = components => type =>
+  R.propOr(
+    null,
+    'long_name',
+    R.find(component => R.includes(type, component.types), components),
+  );
+
+const mapAddress = findAddressResult => {
+  const result = R.head(R.pathOr([{}], ['data', 'results'], findAddressResult));
+  const components = R.prop('address_components', result);
+
+  const findComponent = createFindComponent(components);
+  const street = findComponent('route');
+  const number = findComponent('street_number');
+  const neighborhood = findComponent('sublocality_level_1');
+  const city = findComponent('administrative_area_level_2');
+  const state = findComponent('administrative_area_level_1');
+  const country = findComponent('country');
+
+  const { lat: latitude, lng: longitude } = R.pathOr(
+    {},
+    ['geometry', 'location'],
+    result,
+  );
+  const completeAddressIsValid = R.all(a => a, [
+    street,
+    number,
+    neighborhood,
+    city,
+    state,
+    country,
+  ]);
+  const address = {
+    street,
+    number,
+    neighborhood,
+    city,
+    state,
+    country,
+    geoLocalization: {
+      latitude,
+      longitude,
+    },
+  };
+
+  return completeAddressIsValid ? address : completeAddressIsValid;
+};
+
 const AddDeliveryScene = props => {
   const { deliveries, setDeliveries } = props;
   const [clientName, setClientName] = useState('');
   const [addressString, setAddressString] = useState('');
-  const [weight, setWeight] = useState(0);
-  const [completeAddress, setCompleteAddress] = useState({});
+  const [weight, setWeight] = useState('');
+  const [completeAddress, setCompleteAddress] = useState(false);
   const classes = useStyles();
 
   const handleFindAddress = async () => {
     const registerResult = await findAddressDatasource(
       R.split(' ', addressString),
     );
-    console.log(registerResult);
-    setCompleteAddress(registerResult);
+    setCompleteAddress(mapAddress(registerResult));
   };
 
-  const deliveryIsValid = R.all(a => a, [clientName, weight]);
+  const deliveryIsValid = R.all(a => a, [clientName, weight, completeAddress]);
 
   const handleAddRoute = async () => {
     const newDelivery = {
       clientName,
       weight,
-      address: {
-        street: 'R. dos Bobos',
-        number: '0B',
-        neighborhood: 'Vila Césamo',
-        city: 'Nárnia',
-        state: 'São Paulo',
-        country: 'Brazil',
-        geoLocalization: {
-          latitude: '12.1234',
-          longitude: '21.4567',
-        },
-      },
+      address: completeAddress,
     };
+
     const createDeliveryRes = await createDeliveryDatasource(newDelivery);
-    // eslint-disable-next-line no-underscore-dangle
     const createdDelivery = R.path(
       ['data', 'createdDelivery'],
       createDeliveryRes,
     );
-    console.log(createDeliveryRes);
+
     setDeliveries(R.append(createdDelivery), deliveries);
     return createDeliveryRes;
   };
@@ -120,7 +156,8 @@ const AddDeliveryScene = props => {
             color="secondary"
             disabled={!addressString}
             onClick={handleFindAddress}
-            className={classes.submit}>
+            className={classes.submit}
+          >
             Procurar endereço
           </Button>
           <Button
@@ -128,7 +165,8 @@ const AddDeliveryScene = props => {
             color="primary"
             disabled={!deliveryIsValid}
             onClick={handleAddRoute}
-            className={classes.submit}>
+            className={classes.submit}
+          >
             Adicionar Rota
           </Button>
         </div>
