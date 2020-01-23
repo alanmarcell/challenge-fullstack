@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import * as R from 'ramda';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import {
   deliveriesDatasource,
@@ -11,6 +11,7 @@ import {
 } from '../../datasource/challenge.datasource';
 import DeliveriesList from './DeliveriesList';
 import AddDeliveryScene from './AddDelivery';
+import LeafletMap from './LeafletMap';
 
 const useStyles = makeStyles(theme => ({
   table: {
@@ -62,14 +63,24 @@ const DeliveriesScene = () => {
 
   return (
     <Paper className={classes.paper}>
-      <DeliveriesList deliveries={deliveries} />
-      <AddDeliveryScene deliveries={deliveries} setDeliveries={setDeliveries} />
-      <Button onClick={onResetDeliveries} variant="outlined">
-        <Typography>Resetar Cadastro</Typography>
-      </Button>
-      <Button onClick={onLogout} variant="outlined">
-        <Typography>Logout</Typography>
-      </Button>
+      <Grid container spacing={1}>
+        <Grid item xs={12} md={4}>
+          <AddDeliveryScene
+            deliveries={deliveries}
+            setDeliveries={setDeliveries}
+          />
+          <Button onClick={onResetDeliveries} variant="outlined">
+            <Typography>Resetar Cadastro</Typography>
+          </Button>
+          <Button onClick={onLogout} variant="outlined">
+            <Typography>Logout</Typography>
+          </Button>
+        </Grid>
+        <Grid item xs={12} md={8}>
+          <LeafletMap deliveries={deliveries} />
+          <DeliveriesList deliveries={deliveries} />
+        </Grid>
+      </Grid>
     </Paper>
   );
 };
